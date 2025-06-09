@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 namespace Carbon.Plugins
 {
-    [Info("BysterPlugin", "TuPiDAn", "3.9.3")]
+    [Info("BysterPlugin", "TuPiDAn", "3.9.4")]
     [Description("Adds bots with movement, infinite ammo, and other features.")]
     public class BysterPlugin : CarbonPlugin
     {
@@ -440,8 +440,6 @@ namespace Carbon.Plugins
             timer.Once(0.2f, () => {
                 if (bot != null && !bot.IsDestroyed)
                 {
-                    bot.inventory.Strip();
-                    
                     // Экипируем броню если включено
                     if (config.ArmorConfig.AutoEquipNewBots)
                     {
@@ -1394,6 +1392,12 @@ namespace Carbon.Plugins
         {
             if (player == null || !_spawnedBots.Contains(player.userID)) return;
             
+            // ДОБАВЛЯЕМ: Очищаем инвентарь бота чтобы не выпадал лут
+            if (player.inventory != null)
+            {
+                player.inventory.Strip();
+            }
+            
             if (!config.SpawningConfig.AutoRespawn)
             {
                 _spawnedBots.Remove(player.userID);
@@ -1438,8 +1442,6 @@ namespace Carbon.Plugins
             timer.Once(0.2f, () => {
                 if (newBot != null && !newBot.IsDestroyed)
                 {
-                    newBot.inventory.Strip();
-                    
                     // ДОБАВЛЯЕМ ЭКИПИРОВКУ БРОНИ ПРИ ВОЗРОЖДЕНИИ
                     if (config.ArmorConfig.AutoEquipNewBots)
                     {
